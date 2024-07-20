@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="tr">
+    <head> 
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>HAVA DURMU-basitce-Gosterim</title>
+        <link rel="stylesheet" href="Havadurumu.css">
+    </head>
+    <body>
+        <div class="card">
+            <div class="search">
+                <input type="text" placeholder="şehir ismini giriniz "  spellcheck="false"> <!-- spellcheck true veya false olmalı-->
+                <button>   <img src="resimler/Arama.jpg" alt="arama gösterimi" >
+                     </button>
+            </div>
+       
+  <div class="weather">
+          
+             <img src="resimler/gunes.jpg" class="havadurumu-ikonu">
+            
+             <h1 class="derece">29°C </h1>
+             <h2 class="sehir">Ereğli</h2>
+     
+             <div class="detaylar">
+     
+                <div class="col"><img src="resimler/NEm.jpg ">
+     
+                    <div> <p class="nem"> %50</p>
+     
+                        <p >nem</p>
+                    </div>
+                </div>
+                <div class="col"><img src="resimler/Ruzgarli.jpg ">
+     
+                    <div> <p class="ruzgar"> 17 km/h</p>
+                            <p >Ruzgar Hızı </p>
+                    </div>
+                </div>
+
+     </div>
+   </div>
+ </div>
+ 
+<script>
+const apiKey="a64d268eb899b99bfbd5449f71ee7efa";
+  const apiUrl="https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+ 
+   
+   const searchBox = document.querySelector(".search input");
+   const searchBtn = document.querySelector(".search button");
+    const havadurumu_ikonu = document.querySelector(".havadurumu-ikonu")
+    async function checkWeather(sehir){
+    
+    const response = await fetch(`${apiUrl}${sehir}&appid=${apiKey}`);
+    if(response.status==401)
+    { console.error("hatalı apı anahtarına sahipsiniz");
+    return;}
+
+    var data = await response.json();
+
+    console.log(data);
+    
+       document.querySelector(".sehir").innerHTML=data.name;  
+    //  burası çok önemli api ile bağlantı kuruyoruz kodumuzla // 
+       document.querySelector(".derece").innerHTML=data.main.temp + "°C";
+       document.querySelector(".nem").innerHTML=data.main.humidity + "%";
+       document.querySelector(".ruzgar").innerHTML=data.wind.speed + "km/h";
+    if(data.weather[0].main =="Clouds")
+    { havadurumu_ikonu.src = " resimler/bulutlu.jpg"
+
+    }
+   else if(data.weather[0].main =="Clear")
+    { havadurumu_ikonu.src = " resimler/gunes.jpg"
+
+    }
+   else if(data.weather[0].main =="Rain")
+    { havadurumu_ikonu.src = " resimler/yagmurlu.jpg"
+
+    }
+  else  if(data.weather[0].main =="Drizzle")
+    { havadurumu_ikonu.src = " resimler/yagmurluGünesli.jpg"
+
+    }
+    else if(data.weather[0].main =="Mist")
+    { havadurumu_ikonu.src = " resimler/karlı.jpg"
+
+    }
+
+    document.querySelector(".weather").style.display="block";
+}
+  searchBtn.addEventListener("click",()=>{
+    checkWeather(searchBox.value);
+  });
+  </script> 
+
+    </body> 
+</html>
